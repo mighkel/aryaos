@@ -471,13 +471,13 @@ ham@nd-eggs:~/aryaos-build/aryaos$ head -20 build.sh
 ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
-### Step 7: Set up QEMU for ARM Emulation
+### Step 7: Set up QEMU for ARM Emulation (updated, see below)
 ```
 # Look for configuration files
 find . -name "*.yml" -o -name "*.yaml" -o -name "config*" -o -name "build*" -type f
 ```
 
-### Step 8: Check for AryaOS-specific Build Configuration (Updated)
+### Step 8: Check for AryaOS-specific Build Configuration (updated, see below)
 ```
 # Look for configuration files (you've already done this but let's see the output)
 find . -name "*.yml" -o -name "*.yaml" -o -name "config*" -o -name "build*" -type f
@@ -536,7 +536,33 @@ ham@nd-eggs:~/aryaos-build/aryaos$ find . -name "*.yml" -o -name "*.yaml" -o -na
 ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
+### Step 7: Fix the Configuration
+```
+# Edit the config file to fix the shared_files path
+sed -i 's|SHARED_FILES="$(pwd)/../shared_files"|SHARED_FILES="$(pwd)/shared_files"|' config
 
+# Verify the change
+grep SHARED_FILES config
+```
+
+### Step 8: Set up QEMU (for ARM emulation)
+```
+# Enable ARM emulation (needed since we're building ARM images on x86)
+sudo systemctl enable --now binfmt-support
+sudo update-binfmts --enable qemu-aarch64
+
+# Verify it's working
+ls /proc/sys/fs/binfmt_misc/ | grep qemu
+```
+
+### Step 9: Run the Build!
+```
+# Make sure build.sh is executable
+chmod +x build.sh
+
+# Start the build (this will take 30-60 minutes)
+sudo ./build.sh
+```
 
 
 
