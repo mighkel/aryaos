@@ -190,7 +190,7 @@ sudo apt install -y debian-archive-keyring
 sudo gpg --homedir /etc/apt/trusted.gpg.d --no-default-keyring --keyring /etc/apt/trusted.gpg.d/debian-archive-keyring.gpg --keyserver keyserver.ubuntu.com --recv-keys 6ED0E7B82643E131 78DBA3BC47EF2265 F8D2585B8783D481 54404762BBB6E853 BDE6D2B9216EC7A8
 ```
 
-# Result
+### Result
 ```
 ham@nd-eggs:~$ sudo gpg --homedir /etc/apt/trusted.gpg.d --no-default-keyring --keyring /etc/apt/trusted.gpg.d/debian-archive-keyring.gpg --keyserver keyserver.ubuntu.com --recv-keys 6ED0E7B82643E131 78DBA3BC47EF2265 F8D2585B8783D481 54404762BBB6E853 BDE6D2B9216EC7A8
 gpg: WARNING: unsafe permissions on homedir '/etc/apt/trusted.gpg.d'
@@ -371,7 +371,17 @@ CHANGELOG.md        .git        Makefile       .readthedocs.yml  vars.yml
 CODE_OF_CONDUCT.md  .github     mkdocs.yml     shared_files
 ham@nd-eggs:~/aryaos-build/aryaos$
 ```
+### Before Step 7 - Let's Examine the Build Configuration
+```
+# Look at the build configuration
+cat config
 
+# Look at what custom stages AryaOS provides
+ls -la stages/
+
+# Check the main build script
+head -20 build.sh
+```
 
 ### Step 7: Set up QEMU for ARM Emulation
 ```
@@ -379,6 +389,11 @@ ham@nd-eggs:~/aryaos-build/aryaos$
 find . -name "*.yml" -o -name "*.yaml" -o -name "config*" -o -name "build*" -type f
 ```
 
+### Step 8: Check for AryaOS-specific Build Configuration (Updated)
+```
+# Look for configuration files (you've already done this but let's see the output)
+find . -name "*.yml" -o -name "*.yaml" -o -name "config*" -o -name "build*" -type f
+```
 
 
 
