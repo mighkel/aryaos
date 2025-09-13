@@ -361,6 +361,18 @@ Configuration files
 Any stages/ directory
 Any scripts or documentation about the build process
 
+### Result
+```
+ham@nd-eggs:~/aryaos-build/aryaos$ ls -a
+.                   config      .gitignore     pi-gen            site.yml
+..                  Dockerfile  inventory.yml  pyproject.toml    stages
+build.sh            docs        LICENSE        README.md         test.sh
+CHANGELOG.md        .git        Makefile       .readthedocs.yml  vars.yml
+CODE_OF_CONDUCT.md  .github     mkdocs.yml     shared_files
+ham@nd-eggs:~/aryaos-build/aryaos$
+```
+
+
 ### Step 7: Set up QEMU for ARM Emulation
 ```
 # Look for configuration files
