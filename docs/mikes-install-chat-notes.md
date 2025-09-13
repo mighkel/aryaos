@@ -375,12 +375,99 @@ ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 # Look at the build configuration
 cat config
+```
+
+```
+ham@nd-eggs:~/aryaos-build/aryaos$ cat config
+#!/bin/bash
+# PI-Gen config for AryaOS.
+#
+# Copyright Sensors & Signals LLC https://www.snstac.com/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# shellcheck disable=SC2034
+STAGE_LIST="stage0 stage1 stage2 ../stages/stage-base ../stages/stage-aryaos ../stages/stage-pytak ../stages/stage-node-red ../stages/stage-docker ../stages/stage-adsbcot ../stages/stage-aiscot ../stages/stage-dronecot"
+
+IMG_NAME="aryaos"
+PI_GEN_RELEASE="AryaOS: The Operating System for Modern Situational Awareness."
+TARGET_HOSTNAME="aryaos"
+FIRST_USER_NAME="pi"
+FIRST_USER_PASS="aryaos415"
+DISABLE_FIRST_BOOT_USER_RENAME=1
+RELEASE="bookworm"
+WPA_ESSID="AryaOS-WiFi"
+WPA_PASSWORD="aryaos415"
+WPA_COUNTRY="US"
+LOCALE_DEFAULT="en_US.UTF-8"
+KEYBOARD_LAYOUT="English (US)"
+KEYBOARD_KEYMAP="us"
+ENABLE_SSH=1
+# APT_PROXY="http://172.17.2.88:3142"
+SHARED_FILES="$(pwd)/../shared_files"
+export SHARED_FILES
+ham@nd-eggs:~/aryaos-build/aryaos$
+```
+
 
 # Look at what custom stages AryaOS provides
+```
 ls -la stages/
+```
+
+```
+ham@nd-eggs:~/aryaos-build/aryaos$ ls -la stages/
+total 44
+drwxrwxr-x 11 ham ham 4096 Sep 13 06:30 .
+drwxrwxr-x  8 ham ham 4096 Sep 13 06:30 ..
+drwxrwxr-x  9 ham ham 4096 Sep 13 06:30 stage-adsbcot
+drwxrwxr-x  4 ham ham 4096 Sep 13 06:30 stage-aiscot
+drwxrwxr-x  5 ham ham 4096 Sep 13 06:30 stage-aryaos
+drwxrwxr-x  4 ham ham 4096 Sep 13 06:30 stage-base
+drwxrwxr-x  5 ham ham 4096 Sep 13 06:30 stage-docker
+drwxrwxr-x  4 ham ham 4096 Sep 13 06:30 stage-dronecot
+drwxrwxr-x  4 ham ham 4096 Sep 13 06:30 stage-node-red
+drwxrwxr-x  3 ham ham 4096 Sep 13 06:30 stage-patch
+drwxrwxr-x  4 ham ham 4096 Sep 13 06:30 stage-pytak
+ham@nd-eggs:~/aryaos-build/aryaos$
+```
 
 # Check the main build script
 head -20 build.sh
+```
+
+```
+ham@nd-eggs:~/aryaos-build/aryaos$ head -20 build.sh
+#!/usr/bin/env bash
+# Wrapper for pi-gen's build.sh script for AryaOS.
+#
+# Copyright Sensors & Signals LLC https://www.snstac.com/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at 
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# shellcheck disable=SC2164
+(cd ./pi-gen; ./build.sh -c ../config)
+ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
 ### Step 7: Set up QEMU for ARM Emulation
@@ -393,6 +480,59 @@ find . -name "*.yml" -o -name "*.yaml" -o -name "config*" -o -name "build*" -typ
 ```
 # Look for configuration files (you've already done this but let's see the output)
 find . -name "*.yml" -o -name "*.yaml" -o -name "config*" -o -name "build*" -type f
+```
+```
+ham@nd-eggs:~/aryaos-build/aryaos$ find . -name "*.yml" -o -name "*.yaml" -o -name "config*" -o -name "build*" -type f
+./pi-gen/.gitlab-ci.yml
+./pi-gen/build.sh
+./pi-gen/.git/config
+./pi-gen/build-docker.sh
+./pi-gen/stage1/00-boot-files/files/config.txt
+./config
+./vars.yml
+./site.yml
+./docs/build.md
+./docs/config.md
+./build.sh
+./.github/workflows/pi-gen.yml
+./.github/workflows/node-red-pkg.yml
+./.git/config
+./stages/stage-aryaos/handlers/main.yml
+./stages/stage-aryaos/tasks/recorder.yml
+./stages/stage-aryaos/tasks/portal.yml
+./stages/stage-aryaos/tasks/common.yml
+./stages/stage-aryaos/tasks/uuid.yml
+./stages/stage-aryaos/tasks/wifi.yml
+./stages/stage-aryaos/tasks/main.yml
+./stages/stage-adsbcot/handlers/main.yml
+./stages/stage-adsbcot/tasks/dump978.yml
+./stages/stage-adsbcot/tasks/fa.yml
+./stages/stage-adsbcot/tasks/readsb.yml
+./stages/stage-adsbcot/tasks/tar1090.yml
+./stages/stage-adsbcot/tasks/main.yml
+./stages/stage-adsbcot/tasks/adsbcot.yml
+./stages/stage-dronecot/tasks/containers.yml
+./stages/stage-dronecot/tasks/dronecot.yml
+./stages/stage-dronecot/tasks/drivers.yml
+./stages/stage-dronecot/tasks/main.yml
+./stages/stage-docker/tasks/main.yml
+./stages/stage-pytak/tasks/config.yml
+./stages/stage-pytak/tasks/main.yml
+./stages/stage-pytak/tasks/install.yml
+./stages/stage-node-red/tasks/main.yml
+./stages/stage-base/tasks/main.yml
+./stages/stage-base/tasks/tshark.yml
+./stages/stage-base/tasks/packages.yml
+./stages/stage-base/tasks/zerotier.yml
+./stages/stage-aiscot/tasks/ais-catcher.yml
+./stages/stage-aiscot/tasks/main.yml
+./inventory.yml
+./shared_files/dronecot/docker-uas-sensor/config
+./shared_files/dronecot/docker-uas-sensor/docker-compose.yml
+./shared_files/dronecot/docker-uas-broker/docker-compose.yml
+./.readthedocs.yml
+./mkdocs.yml
+ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
 
