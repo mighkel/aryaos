@@ -545,23 +545,88 @@ sed -i 's|SHARED_FILES="$(pwd)/../shared_files"|SHARED_FILES="$(pwd)/shared_file
 grep SHARED_FILES config
 ```
 
+```
+ham@nd-eggs:~/aryaos-build/aryaos$ sed -i 's|SHARED_FILES="$(pwd)/../shared_files"|SHARED_FILES="$(pwd)/shared_files"|' config
+ham@nd-eggs:~/aryaos-build/aryaos$ grep SHARED_FILES config
+SHARED_FILES="$(pwd)/shared_files"
+export SHARED_FILES
+ham@nd-eggs:~/aryaos-build/aryaos$
+```
+
 ### Step 8: Set up QEMU (for ARM emulation)
 ```
 # Enable ARM emulation (needed since we're building ARM images on x86)
 sudo systemctl enable --now binfmt-support
 sudo update-binfmts --enable qemu-aarch64
+```
+
+```
+ham@nd-eggs:~/aryaos-build/aryaos$ sudo systemctl enable --now binfmt-support
+[sudo] password for ham: 
+Synchronizing state of binfmt-support.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable binfmt-support
+ham@nd-eggs:~/aryaos-build/aryaos$ sudo update-binfmts --enable qemu-aarch64
+update-binfmts: warning: qemu-aarch64 already enabled in kernel.
+ham@nd-eggs:~/aryaos-build/aryaos$
+```
 
 # Verify it's working
+```
 ls /proc/sys/fs/binfmt_misc/ | grep qemu
+```
+```
+ham@nd-eggs:~/aryaos-build/aryaos$ ls /proc/sys/fs/binfmt_misc/ | grep qemu
+qemu-aarch64
+qemu-alpha
+qemu-arm
+qemu-armeb
+qemu-cris
+qemu-hexagon
+qemu-hppa
+qemu-m68k
+qemu-microblaze
+qemu-mips
+qemu-mips64
+qemu-mips64el
+qemu-mipsel
+qemu-mipsn32
+qemu-mipsn32el
+qemu-ppc
+qemu-ppc64
+qemu-ppc64le
+qemu-riscv32
+qemu-riscv64
+qemu-s390x
+qemu-sh4
+qemu-sh4eb
+qemu-sparc
+qemu-sparc32plus
+qemu-sparc64
+qemu-xtensa
+qemu-xtensaeb
+ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
 ### Step 9: Run the Build!
 ```
 # Make sure build.sh is executable
 chmod +x build.sh
+```
 
 # Start the build (this will take 30-60 minutes)
+```
 sudo ./build.sh
+```
+
+```
+ham@nd-eggs:~/aryaos-build/aryaos$ chmod +x build.sh
+ham@nd-eggs:~/aryaos-build/aryaos$ sudo ./build.sh
+Required dependencies not installed
+
+This can be resolved on Debian/Raspbian systems by installing:
+pigz arch-test
+[06:58:58] Build failed
+ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
 
