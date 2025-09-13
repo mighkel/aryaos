@@ -442,6 +442,7 @@ ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
 # Check the main build script
+```
 head -20 build.sh
 ```
 
