@@ -570,7 +570,7 @@ update-binfmts: warning: qemu-aarch64 already enabled in kernel.
 ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
-# Verify it's working
+### Verify it's working
 ```
 ls /proc/sys/fs/binfmt_misc/ | grep qemu
 ```
@@ -607,13 +607,13 @@ qemu-xtensaeb
 ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
-### Step 9: Run the Build!
+### Step 9: Run the Build! (Jump tp 9.1)
 ```
 # Make sure build.sh is executable
 chmod +x build.sh
 ```
 
-# Start the build (this will take 30-60 minutes)
+### Start the build (this will take 30-60 minutes)
 ```
 sudo ./build.sh
 ```
@@ -629,7 +629,20 @@ pigz arch-test
 ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
+### Step 9.1: Install Missing Dependencies
+```
+# Install the missing dependencies
+sudo apt install -y pigz arch-test
+```
+```
+# Let's also install a few more that pi-gen commonly needs
+sudo apt install -y pxz
+```
 
+### Step 9.2: Try the Build Again
+```
+sudo ./build.sh
+```
 
 
 
