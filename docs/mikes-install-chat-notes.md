@@ -419,7 +419,7 @@ ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
 
-# Look at what custom stages AryaOS provides
+### Look at what custom stages AryaOS provides
 ```
 ls -la stages/
 ```
@@ -441,7 +441,7 @@ drwxrwxr-x  4 ham ham 4096 Sep 13 06:30 stage-pytak
 ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
-# Check the main build script
+### Check the main build script
 ```
 head -20 build.sh
 ```
