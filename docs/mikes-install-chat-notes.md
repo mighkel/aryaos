@@ -634,9 +634,40 @@ ham@nd-eggs:~/aryaos-build/aryaos$
 # Install the missing dependencies
 sudo apt install -y pigz arch-test
 ```
+
 ```
 # Let's also install a few more that pi-gen commonly needs
 sudo apt install -y pxz
+```
+```
+ham@nd-eggs:~/aryaos-build/aryaos$ sudo apt install -y pigz arch-test
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following NEW packages will be installed:
+  arch-test pigz
+0 upgraded, 2 newly installed, 0 to remove and 295 not upgraded.
+Need to get 76.1 kB of archives.
+After this operation, 411 kB of additional disk space will be used.
+Get:1 http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 pigz amd64 2.6-1 [63.6 kB]
+Get:2 https://archive.raspberrypi.org/debian bookworm/main amd64 arch-test all 0.20-1+rpt1 [12.5 kB]
+Fetched 76.1 kB in 1s (97.9 kB/s)                          
+Selecting previously unselected package pigz.
+(Reading database ... 187668 files and directories currently installed.)
+Preparing to unpack .../archives/pigz_2.6-1_amd64.deb ...
+Unpacking pigz (2.6-1) ...
+Selecting previously unselected package arch-test.
+Preparing to unpack .../arch-test_0.20-1+rpt1_all.deb ...
+Unpacking arch-test (0.20-1+rpt1) ...
+Setting up pigz (2.6-1) ...
+Setting up arch-test (0.20-1+rpt1) ...
+Processing triggers for man-db (2.10.2-1) ...
+ham@nd-eggs:~/aryaos-build/aryaos$ sudo apt install -y pxz
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+E: Unable to locate package pxz
+ham@nd-eggs:~/aryaos-build/aryaos$
 ```
 
 ### Step 9.2: Try the Build Again
