@@ -151,17 +151,16 @@ E: Some index files failed to download. They have been ignored, or old ones used
 ham@nd-eggs:~$
 ```
 
-
-
-
+### Step 2.5 Continued: Install Available Packages
 ```
-# Install Raspberry Pi specific packages
+# Install Raspberry Pi specific packages (skip the armhf ones for now)
 sudo apt install -y \
     raspberrypi-archive-keyring \
     rpi-eeprom \
-    rpi-update \
-    rpi-swap:armhf \
-    rpi-loop-utils:armhf
+    rpi-update
+
+# Try to install the armhf packages - if they fail, that's okay
+sudo apt install -y rpi-swap:armhf rpi-loop-utils:armhf || echo "armhf packages not available, will handle during build"
 ```
 
 ### Step 3: Fix the GPG Key Issues
