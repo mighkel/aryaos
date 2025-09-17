@@ -45,13 +45,8 @@ whiptail
 libelf-dev
 rfkill
 dkms
-git
 bc
 python3-asyncio-mqtt
 python3-protobuf
 python3-aiohttp
 python3-bitstruct
-python3-bitstruct
-python3-protobuf
-python3-aiohttp
-python3-asyncio-mqtt
