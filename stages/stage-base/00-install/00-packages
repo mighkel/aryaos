@@ -1,10 +1,10 @@
 acl
 aha
 apt-transport-https
+arch-test
 build-essential
 ca-certificates
 cmake
-comitup
 curl
 debhelper
 devscripts
