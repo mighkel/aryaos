@@ -44,9 +44,8 @@ wget
 whiptail
 libelf-dev
 rfkill
-linux-headers-generic 
-dkms 
-git 
+dkms
+git
 bc
 python3-asyncio-mqtt
 python3-protobuf
