@@ -32,5 +32,5 @@ KEYBOARD_LAYOUT="English (US)"
 KEYBOARD_KEYMAP="us"
 ENABLE_SSH=1
 # APT_PROXY="http://172.17.2.88:3142"
-SHARED_FILES="$(pwd)/../shared_files"
+SHARED_FILES="$(pwd)/shared_files"
 export SHARED_FILES
