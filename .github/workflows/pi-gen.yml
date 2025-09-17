@@ -1,142 +1,134 @@
-name: Build pi-gen image
-
-# on:
-#   push:
-#     tags:
-#       - 'v*.*.*'
+name: Build AryaOS Image
 
 on:
   push:
     branches:
       - main
   pull_request:
+  workflow_dispatch:
 
 jobs:
-  pi-gen-aryaos:
+  build-aryaos:
     runs-on: ubuntu-latest
-    
-    env:
-      DISABLE_FIRST_BOOT_USER_RENAME: 1
-      ENABLE_SSH: 1
+    timeout-minutes: 180
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      
-      # add a step to copy the pi-gen/config file to pi-gen/.env:
-      # - name: Copy .env file
-      #   run: cp pi-gen/config pi-gen/.env
-      
-      # - name: Load .env file
-      #   uses: xom9ikk/dotenv@v2.3.0
-      #   with:
-      #     path: pi-gen/
-
-      # - name: Create shared_files directory
-      #   run: cp -pr shared_files pi-gen/
-
-      - name: Set current working directory
-        run: echo "GITHUB_CWD=$(pwd)" >> $GITHUB_ENV
-
-      - name: Set SHARED_FILES dir
-        run: echo "SHARED_FILES=$(pwd)/shared_files" >> $GITHUB_ENV
-
-      - name: Show env
-        run: env
-
-      # - name: Build RPi base OS image
-      #   uses: usimd/pi-gen-action@v1
-      #   id: build_base
-      #   # This is the first build step, it will create the base image.
-      #   # The base image is the first stage of the pi-gen build process.
-      #   # It will create a base image with the necessary files and directories.
-      #   # The base image will be used as the starting point for the next stages.
-      #   env:
-      #     SHARED_FILES: ${{ env.SHARED_FILES }}
-      #     GITHUB_CWD: ${{ env.GITHUB_CWD }}
-      #   with:
-      #     increase-runner-disk-size: true
-      #     export-last-stage-only: false
-      #     extra-host-dependencies: 'git'
-
-      #     pi-gen-dir: pi-gen-src
-      #     # Disable the renaming of the first user during the first boot. This make it so 
-      #     # 'username' stays activated. 'username' must be set for this to work. Please be 
-      #     # aware of the implied security risk of defining a default username and password 
-      #     # for your devices.
-      #     disable-first-boot-user-rename: ${{ env.DISABLE_FIRST_BOOT_USER_RENAME || 1 }}
-
-      #     # Enable SSH access to Pi.
-      #     enable-ssh: ${{ env.ENABLE_SSH || 1 }}
-
-      #     image-name: ${{ env.IMG_NAME || 'aryaos' }}-${{ github.GITHUB_REF_NAME || 'undef' }}
-
-      #     hostname: ${{ env.TARGET_HOSTNAME || 'aryaos' }}
-      #     locale: ${{ env.LOCALE_DEFAULT || 'en_US.UTF-8' }}
-      #     password: ${{ env.FIRST_USER_PASS || 'aryaos415' }}
-      #     pi-gen-release: ${{ env.PI_GEN_RELEASE || 'AryaOS' }}
-      #     release: ${{ env.RELEASE || 'bookworm' }}
-      #     # stage-list: "stage0 stage1 stage2 ${{ env.GITHUB_CWD }}/stages/stage-base"
-      #     stage-list: "${{ env.GITHUB_CWD }}/stages/stage-patch stage0 stage1 stage2"
-      #     wpa-country: ${{ env.WPA_COUNTRY || 'US' }}
-      #     wpa-essid: ${{ env.WPA_ESSID || 'AryaOS-WiFi' }}
-      #     wpa-password: ${{ env.WPA_PASSWORD || 'aryaos415' }}
-      #     keyboard-layout: ${{ env.KEYBOARD_LAYOUT || 'English (US)' }}
-      #     keyboard-keymap: ${{ env.KEYBOARD_KEYMAP || 'us' }}
-      #     pi-gen-version: arm64
-      #     verbose-output: true
-
-      
-      - name: Build RPi AryaOS image
-        uses: usimd/pi-gen-action@v1
-        id: build_aryaos
-        # This is the second build step, it will create the AryaOS image.
-        # The AryaOS image is the second stage of the pi-gen build process.
-        # It will create an image with the necessary files and directories for AryaOS.
-        # The AryaOS image will be used as the final image for the Pi.
-        # It will use the base image created in the previous step.
-        # The base image will be used as the starting point for the next stages.
-        # This step will also copy the shared_files directory to the pi-gen directory.
-        
-        env:
-          SHARED_FILES: ${{ env.SHARED_FILES }}
-          GITHUB_CWD: ${{ env.GITHUB_CWD }}
+        uses: actions/checkout@v4
         with:
-          increase-runner-disk-size: true
+          submodules: recursive
+          fetch-depth: 0
 
-          pi-gen-dir: pi-gen-src
-          # Disable the renaming of the first user during the first boot. This make it so 
-          # 'username' stays activated. 'username' must be set for this to work. Please be 
-          # aware of the implied security risk of defining a default username and password 
-          # for your devices.
-          disable-first-boot-user-rename: ${{ env.DISABLE_FIRST_BOOT_USER_RENAME || 1 }}
-
-          # Enable SSH access to Pi.
-          enable-ssh: ${{ env.ENABLE_SSH || 1 }}
-
-          image-name: ${{ env.IMG_NAME || 'aryaos' }}-${{ github.GITHUB_REF_NAME || 'undef' }}
-
-          hostname: ${{ env.TARGET_HOSTNAME || 'aryaos' }}
-          locale: ${{ env.LOCALE_DEFAULT || 'en_US.UTF-8' }}
-          password: ${{ env.FIRST_USER_PASS || 'aryaos415' }}
-          pi-gen-release: ${{ env.PI_GEN_RELEASE || 'AryaOS' }}
-          release: ${{ env.RELEASE || 'bookworm' }}
-          stage-list: "${{ env.GITHUB_CWD }}/stages/stage-patch stage0 stage1 stage2 ${{ env.GITHUB_CWD }}/stages/stage-base"
-          wpa-country: ${{ env.WPA_COUNTRY || 'US' }}
-          wpa-essid: ${{ env.WPA_ESSID || 'AryaOS-WiFi' }}
-          wpa-password: ${{ env.WPA_PASSWORD || 'aryaos415' }}
-          keyboard-layout: ${{ env.KEYBOARD_LAYOUT || 'English (US)' }}
-          keyboard-keymap: ${{ env.KEYBOARD_KEYMAP || 'us' }}
-          pi-gen-version: arm64
-          verbose-output: true
-
-      - name: list dir
+      - name: Initialize submodules
         run: |
-          ls -alR
-  
-      - name: Upload Pi-Gen artifact.
+          git submodule update --init --recursive
+          if [ ! -d "pi-gen" ]; then
+            echo "pi-gen submodule missing, cloning manually..."
+            git clone --depth 1 https://github.com/RPi-Distro/pi-gen.git
+          fi
+          echo "=== pi-gen directory check ==="
+          ls -la pi-gen/
+
+      - name: Free up disk space
+        run: |
+          sudo apt-get remove -y '^dotnet-.*' '^llvm-.*' 'php.*' '^mongodb-.*' '^mysql-.*' azure-cli google-chrome-stable firefox powershell mono-devel libgl1-mesa-dri
+          sudo apt-get autoremove -y
+          sudo apt-get autoclean
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h
+
+      - name: Set up build environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            qemu-user-static \
+            binfmt-support \
+            debian-archive-keyring \
+            debootstrap \
+            zip \
+            dosfstools \
+            build-essential \
+            git \
+            wget \
+            curl \
+            quilt \
+            libarchive-tools \
+            arch-test
+          
+          sudo systemctl enable --now binfmt-support
+          sudo update-binfmts --enable qemu-aarch64 || true
+          sudo update-binfmts --enable qemu-arm || true
+
+      - name: Apply build fixes
+        run: |
+          echo "=== Applying build fixes ==="
+          
+          # Fix shared files path in config
+          sed -i 's|SHARED_FILES="$(pwd)/../shared_files"|SHARED_FILES="$(pwd)/shared_files"|' config
+          
+          # Remove missing packages from pi-gen
+          sed -i '/^rpi-swap$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
+          sed -i '/^rpi-loop-utils$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
+          sed -i '/^rpi-swap rpi-loop-utils$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
+          
+          # Apply package fixes to all stage files
+          ./scripts/fix-packages.sh
+          
+          echo "=== SHARED_FILES setting ==="
+          grep SHARED_FILES config
+
+      - name: Build AryaOS image
+        run: |
+          echo "=== Starting AryaOS build ==="
+          chmod +x build.sh
+          export DEBIAN_FRONTEND=noninteractive
+          
+          echo "=== Directory structure ==="
+          ls -la
+          echo "=== Shared files ==="
+          ls -la shared_files/ || echo "No shared_files directory"
+          
+          timeout 150m sudo -E ./build.sh || {
+            echo "=== Build failed or timed out ==="
+            find pi-gen/work -name "*.log" -exec tail -100 {} \; 2>/dev/null || true
+            exit 1
+          }
+
+      - name: Check build results
+        if: always()
+        run: |
+          sudo chown -R runner:runner pi-gen/work/ 2>/dev/null || true
+          echo "=== Generated files ==="
+          find . -name "*.img" -o -name "*.zip" -ls 2>/dev/null || echo "No images found"
+          echo "=== Deploy directory ==="
+          ls -la pi-gen/deploy/ 2>/dev/null || echo "No deploy directory"
+          echo "=== Build logs ==="
+          find pi-gen/work -name "*.log" -exec echo "=== {} ===" \; -exec tail -50 {} \; 2>/dev/null || true
+
+      - name: Fix permissions for artifacts
+        if: always()
+        run: |
+          sudo chown -R runner:runner pi-gen/ 2>/dev/null || true
+          sudo chown -R runner:runner . 2>/dev/null || true
+
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: pi-gen-stage2
-          path: stage2.tar.gz
-          # ${{ steps.build_aryaos.outputs.image-path }}
+          name: aryaos-build-${{ github.run_number }}
+          path: |
+            pi-gen/deploy/*.img
+            pi-gen/deploy/*.zip
+            pi-gen/work/*/build.log
+          retention-days: 30
+
+      - name: Upload debug logs
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: aryaos-debug-logs-${{ github.run_number }}
+          path: |
+            pi-gen/work/
+            config
+            build.sh
+          retention-days: 7
