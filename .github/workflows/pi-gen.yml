@@ -80,18 +80,33 @@ jobs:
       - name: Build AryaOS image
         run: |
           echo "=== Starting AryaOS build ==="
-          chmod +x build.sh
-          export DEBIAN_FRONTEND=noninteractive
           
+          # Make build script executable
+          chmod +x build.sh
+
+          # Set environment variables
+          export DEBIAN_FRONTEND=noninteractive
+
+          # Show current directory structure
           echo "=== Directory structure ==="
           ls -la
+          echo "=== Config content ==="
+          cat config
+          echo "=== Stages available ==="
+          ls -la stages/
+          echo "=== Pi-gen stages ==="
+          ls -la pi-gen/stage*
           echo "=== Shared files ==="
           ls -la shared_files/ || echo "No shared_files directory"
-          
-          timeout 150m sudo -E ./build.sh || {
-            echo "=== Build failed or timed out ==="
-            find pi-gen/work -name "*.log" -exec tail -100 {} \; 2>/dev/null || true
-            exit 1
+
+          # Run the build with more verbose output
+          timeout 150m sudo -E bash -x ./build.sh || {
+          echo "=== Build failed or timed out ==="
+          echo "=== Full pi-gen work directory ==="
+          find pi-gen/work -type f -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \; 2>/dev/null || true
+          echo "=== Build script content ==="
+          cat build.sh
+          exit 1
           }
 
       - name: Check build results
