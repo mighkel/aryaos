@@ -62,7 +62,7 @@ jobs:
       - name: Apply build fixes
         run: |
           echo "=== Applying build fixes ==="
-          
+          chmod +x scripts/fix-packages.sh
           # Fix shared files path in config
           sed -i 's|SHARED_FILES="$(pwd)/../shared_files"|SHARED_FILES="$(pwd)/shared_files"|' config
           
