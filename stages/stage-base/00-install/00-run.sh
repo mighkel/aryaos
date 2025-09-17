@@ -24,6 +24,6 @@ echo "SHARED_FILES=${SHARED_FILES}"
 echo $(pwd)
 ls -al
 ls -al ..
-ls -al shared_files
+ls -al "${SHARED_FILES}"  # Changed this line
 ls -al ${SHARED_FILES}
 install -v -m 755 "${SHARED_FILES:-../../../shared_files}/base/install_zt.sh" "${ROOTFS_DIR}/usr/src/"
