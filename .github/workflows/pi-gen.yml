@@ -90,25 +90,35 @@ jobs:
           # Show current directory structure
           echo "=== Directory structure ==="
           ls -la
-          echo "=== Config content ==="
-          cat config
-          echo "=== Stages available ==="
-          ls -la stages/
-          echo "=== Pi-gen stages ==="
-          ls -la pi-gen/stage*
+
+          # Debug the stage configuration
+          echo "=== Config verification ==="
+          cat config | grep STAGE_LIST
+          
+          echo "=== Stages availability check ==="
+          cd pi-gen
+          echo "Standard pi-gen stages:"
+          ls -la stage*/
+          echo "Custom stages from config:"
+          ls -la ../stages/stage-*/
+          cd ..
+
+          echo "=== Build script content ==="
+          cat build.sh
+
           echo "=== Shared files ==="
           ls -la shared_files/ || echo "No shared_files directory"
 
-          # Run the build with more verbose output
-          timeout 150m sudo -E bash -x ./build.sh || {
-          echo "=== Build failed or timed out ==="
-          echo "=== Full pi-gen work directory ==="
-          find pi-gen/work -type f -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \; 2>/dev/null || true
-          echo "=== Build script content ==="
-          cat build.sh
-          exit 1
+          # Run the build with verbose output and capture it
+          timeout 150m sudo -E bash -x ./build.sh 2>&1 | tee build-output.log || {
+            echo "=== Build failed or timed out ==="
+            echo "=== Last 100 lines of build output ==="
+            tail -100 build-output.log
+            echo "=== Full pi-gen work directory ==="
+            find pi-gen/work -type f -name "*.log" -exec echo "=== {} ===" \; -exec tail -50 {} \; 2>/dev/null || true
+            exit 1
           }
-
+          
       - name: Check build results
         if: always()
         run: |
