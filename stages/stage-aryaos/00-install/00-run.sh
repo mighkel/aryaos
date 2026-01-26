@@ -86,11 +86,15 @@ install -v -m 755 "${SHARED_FILES}/aryaos/wifi-nuke.py" "${ROOTFS_DIR}/usr/local
 ## FIXME Deprecated replace old NetworkManager Python module. https://github.com/snstac/aryaos/issues/54 
 install -v -m 644 "${SHARED_FILES}/aryaos/NetworkManager.py" "${ROOTFS_DIR}/usr/lib/python3/dist-packages/NetworkManager.py"
 
-## Remove the string ;http://blank.org/ from the connect.html file.
-sed --follow-symlinks -i -E -e "s/;http:\/\/blank.org\///" "${ROOTFS_DIR}/usr/share/comitup/web/templates/connect.html"
+## Remove the string ;http://blank.org/ from the connect.html file (if comitup is installed).
+if [ -f "${ROOTFS_DIR}/usr/share/comitup/web/templates/connect.html" ]; then
+    sed --follow-symlinks -i -E -e "s/;http:\/\/blank.org\///" "${ROOTFS_DIR}/usr/share/comitup/web/templates/connect.html"
+fi
 
-## Replace default comitup port 80 with 9080
-sed --follow-symlinks -i -E -e "s/port=80/port=9080/" "${ROOTFS_DIR}/usr/share/comitup/web/comitupweb.py"
+## Replace default comitup port 80 with 9080 (if comitup is installed).
+if [ -f "${ROOTFS_DIR}/usr/share/comitup/web/comitupweb.py" ]; then
+    sed --follow-symlinks -i -E -e "s/port=80/port=9080/" "${ROOTFS_DIR}/usr/share/comitup/web/comitupweb.py"
+fi
 ## TODO Add support for main branch of comitup, which uses a different syntax for port configuration.
 ## sed --follow-symlinks -i -E -e "s/SERVER_PORT = 80/SERVER_PORT = ${COMITUP_WEB_PORT}/" /usr/share/comitup/web/comitupweb.py
 
