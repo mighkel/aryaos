@@ -14,14 +14,19 @@
 # limitations under the License.
 #
 
-# Add the line EnvironmentFile=/etc/aryaos/aryaos-config.txt to /lib/systemd/system/adsbcot.service if the line does not already exist
-grep -qxF "EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/adsbcot.service || sed --follow-symlinks -i -E -e "/\[Service\]/a EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/adsbcot.service
+# Install downloaded .deb packages
+if [ -d /tmp/pytak-debs ] && [ "$(ls -A /tmp/pytak-debs/*.deb 2>/dev/null)" ]; then
+    echo "Installing pytak .deb packages..."
+    dpkg -i /tmp/pytak-debs/*.deb || apt-get install -f -y
+    rm -rf /tmp/pytak-debs
+else
+    echo "Warning: No pytak .deb files found in /tmp/pytak-debs"
+fi
 
-# Add the line EnvironmentFile=/etc/aryaos/aryaos-config.txt to /lib/systemd/system/aiscot.service if the line does not already exist
-grep -qxF "EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/aiscot.service || sed --follow-symlinks -i -E -e "/\[Service\]/a EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/aiscot.service
-
-# Add the line EnvironmentFile=/etc/aryaos/aryaos-config.txt to /lib/systemd/system/dronecot.service if the line does not already exist
-grep -qxF "EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/dronecot.service || sed --follow-symlinks -i -E -e "/\[Service\]/a EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/dronecot.service
-
-# Add the line EnvironmentFile=/etc/aryaos/aryaos-config.txt to /lib/systemd/system/lincot.service if the line does not already exist
-grep -qxF "EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/lincot.service || sed --follow-symlinks -i -E -e "/\[Service\]/a EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/lincot.service
+# Add EnvironmentFile to service files if they exist
+for service in adsbcot aiscot dronecot lincot; do
+    if [ -f "/lib/systemd/system/${service}.service" ]; then
+        grep -qxF "EnvironmentFile=/etc/aryaos/aryaos-config.txt" "/lib/systemd/system/${service}.service" || \
+            sed --follow-symlinks -i -E -e "/\[Service\]/a EnvironmentFile=/etc/aryaos/aryaos-config.txt" "/lib/systemd/system/${service}.service"
+    fi
+done
