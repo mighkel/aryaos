@@ -71,6 +71,9 @@ jobs:
           sed -i '/^rpi-loop-utils$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
           sed -i '/^rpi-swap rpi-loop-utils$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
           sed -i '/^rpi-usb-gadget$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
+
+          # Fix missing rpi-resize service (removed in recent Raspberry Pi OS)
+          sed -i 's/systemctl enable rpi-resize/systemctl enable rpi-resize 2>\/dev\/null || true/' pi-gen/stage2/01-sys-tweaks/01-run.sh || true
           
           # Apply package fixes to all stage files
           ./scripts/fix-packages.sh
