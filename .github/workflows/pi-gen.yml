@@ -63,9 +63,7 @@ jobs:
         run: |
           echo "=== Applying build fixes ==="
           chmod +x scripts/fix-packages.sh
-          # Fix shared files path in config
-          sed -i 's|SHARED_FILES="$(pwd)/../shared_files"|SHARED_FILES="$(pwd)/shared_files"|' config
-          
+
           # Remove missing packages from pi-gen stage2
           sed -i '/^rpi-swap$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
           sed -i '/^rpi-loop-utils$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
