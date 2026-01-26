@@ -66,11 +66,14 @@ jobs:
           # Fix shared files path in config
           sed -i 's|SHARED_FILES="$(pwd)/../shared_files"|SHARED_FILES="$(pwd)/shared_files"|' config
           
-          # Remove missing packages from pi-gen
+          # Remove missing packages from pi-gen stage2
           sed -i '/^rpi-swap$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
           sed -i '/^rpi-loop-utils$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
           sed -i '/^rpi-swap rpi-loop-utils$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
           sed -i '/^rpi-usb-gadget$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
+
+          # Remove missing rpi-cloud-init-mods package
+          sed -i '/^rpi-cloud-init-mods$/d' pi-gen/stage2/04-cloud-init/00-packages || true
 
           # Fix missing rpi-resize service (removed in recent Raspberry Pi OS)
           sed -i 's/systemctl enable rpi-resize/systemctl enable rpi-resize 2>\/dev\/null || true/' pi-gen/stage2/01-sys-tweaks/01-run.sh || true
