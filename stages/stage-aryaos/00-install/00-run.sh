@@ -80,6 +80,7 @@ install -v -m 644 "${SHARED_FILES}/aryaos/comitup.conf" "${ROOTFS_DIR}/etc/"
 install -v -m 755 "${SHARED_FILES}/aryaos/run_comitup.sh" "${ROOTFS_DIR}/usr/local/sbin/"
 install -v -m 755 "${SHARED_FILES}/aryaos/comitup-callback.sh" "${ROOTFS_DIR}/usr/local/sbin/"
 install -v -m 644 "${SHARED_FILES}/aryaos/comitup.service" "${ROOTFS_DIR}/lib/systemd/system/"
+mkdir -p "${ROOTFS_DIR}/var/lib/comitup/"
 install -v -m 644 "${SHARED_FILES}/aryaos/comitup.json" "${ROOTFS_DIR}/var/lib/comitup/"
 install -v -m 755 "${SHARED_FILES}/aryaos/wifi-nuke.py" "${ROOTFS_DIR}/usr/local/sbin/"
 ## FIXME Deprecated replace old NetworkManager Python module. https://github.com/snstac/aryaos/issues/54 
