@@ -27,6 +27,7 @@ fi
 echo "=== Fixing other stage package files ==="
 find stages/ -name "*packages*" -type f -exec sed -i '/^rpi-swap$/d' {} \;
 find stages/ -name "*packages*" -type f -exec sed -i '/^rpi-loop-utils$/d' {} \;
+find stages/ -name "*packages*" -type f -exec sed -i '/^rpi-usb-gadget$/d' {} \;
 find stages/ -name "*packages*" -type f -exec sed -i '/^linux-headers-.*$/d' {} \;
 find stages/ -name "*packages*" -type f -exec sed -i '/^raspberrypi-kernel-headers$/d' {} \;
 find stages/ -name "*packages*" -type f -exec sed -i '/^comitup$/d' {} \;

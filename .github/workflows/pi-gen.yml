@@ -70,6 +70,7 @@ jobs:
           sed -i '/^rpi-swap$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
           sed -i '/^rpi-loop-utils$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
           sed -i '/^rpi-swap rpi-loop-utils$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
+          sed -i '/^rpi-usb-gadget$/d' pi-gen/stage2/01-sys-tweaks/00-packages || true
           
           # Apply package fixes to all stage files
           ./scripts/fix-packages.sh
