@@ -1,8 +1,9 @@
 #!/bin/bash
 # fix-debian-keys.sh
-# Patches pi-gen's stage0/00-configure-apt/00-run.sh to copy Debian archive
-# keyring into the rootfs before apt-get update runs.
-# Required because the arm64 branch expects trixie but we build bookworm.
+# Patches pi-gen's stage0/00-configure-apt/00-run.sh to download and install
+# the Debian archive keyring into the rootfs before apt-get update runs.
+# Required because the arm64 branch expects trixie but we build bookworm,
+# and the Ubuntu host doesn't have Debian's signing keys.
 
 SCRIPT="pi-gen/stage0/00-configure-apt/00-run.sh"
 
@@ -11,18 +12,26 @@ if [ ! -f "$SCRIPT" ]; then
     exit 0
 fi
 
-# Create a patched version that copies the keyring before anything else
+# Create a patched version that installs the Debian keyring before anything else
 TMPFILE=$(mktemp)
 head -1 "$SCRIPT" > "$TMPFILE"
 cat >> "$TMPFILE" << 'KEYFIX'
 
-# Fix: copy Debian archive keyring into rootfs for bookworm
-if [ -f /usr/share/keyrings/debian-archive-keyring.gpg ]; then
-    install -m 0755 -d "${ROOTFS_DIR}/usr/share/keyrings/"
-    install -m 0755 -d "${ROOTFS_DIR}/etc/apt/trusted.gpg.d/"
-    cp /usr/share/keyrings/debian-archive-keyring.gpg "${ROOTFS_DIR}/usr/share/keyrings/"
-    cp /usr/share/keyrings/debian-archive-keyring.gpg "${ROOTFS_DIR}/etc/apt/trusted.gpg.d/"
-    echo "Copied Debian archive keyring into rootfs"
+# Fix: download and install Debian archive keyring into rootfs for bookworm
+echo "=== Installing Debian archive keyring into rootfs ==="
+KEYRING_URL="http://deb.debian.org/debian/pool/main/d/debian-archive-keyring/debian-archive-keyring_2023.4_all.deb"
+KEYRING_DEB="/tmp/debian-archive-keyring.deb"
+wget -q -O "$KEYRING_DEB" "$KEYRING_URL" || {
+    echo "Warning: Failed to download debian-archive-keyring, trying alternate version"
+    wget -q -O "$KEYRING_DEB" "http://deb.debian.org/debian/pool/main/d/debian-archive-keyring/debian-archive-keyring_2023.3+deb12u1_all.deb" || true
+}
+if [ -f "$KEYRING_DEB" ]; then
+    dpkg-deb -x "$KEYRING_DEB" "${ROOTFS_DIR}/"
+    echo "Installed Debian archive keyring into rootfs"
+    ls -la "${ROOTFS_DIR}/usr/share/keyrings/" | grep debian || true
+    rm -f "$KEYRING_DEB"
+else
+    echo "ERROR: Could not download Debian archive keyring"
 fi
 KEYFIX
 tail -n +2 "$SCRIPT" >> "$TMPFILE"
@@ -30,5 +39,5 @@ mv "$TMPFILE" "$SCRIPT"
 chmod +x "$SCRIPT"
 
 echo "Patched $SCRIPT with keyring fix"
-echo "=== First 20 lines of patched script ==="
-head -20 "$SCRIPT"
+echo "=== First 25 lines of patched script ==="
+head -25 "$SCRIPT"
