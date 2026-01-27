@@ -19,13 +19,11 @@ cat >> "$TMPFILE" << 'KEYFIX'
 
 # Fix: download and install Debian archive keyring into rootfs for bookworm
 echo "=== Installing Debian archive keyring into rootfs ==="
-KEYRING_URL="http://deb.debian.org/debian/pool/main/d/debian-archive-keyring/debian-archive-keyring_2023.4_all.deb"
 KEYRING_DEB="/tmp/debian-archive-keyring.deb"
-wget -q -O "$KEYRING_DEB" "$KEYRING_URL" || {
-    echo "Warning: Failed to download debian-archive-keyring, trying alternate version"
-    wget -q -O "$KEYRING_DEB" "http://deb.debian.org/debian/pool/main/d/debian-archive-keyring/debian-archive-keyring_2023.3+deb12u1_all.deb" || true
-}
-if [ -f "$KEYRING_DEB" ]; then
+wget -q -O "$KEYRING_DEB" "http://ftp.us.debian.org/debian/pool/main/d/debian-archive-keyring/debian-archive-keyring_2023.3+deb12u2_all.deb" || \
+wget -q -O "$KEYRING_DEB" "http://deb.debian.org/debian/pool/main/d/debian-archive-keyring/debian-archive-keyring_2023.3+deb12u2_all.deb" || \
+wget -q -O "$KEYRING_DEB" "http://deb.debian.org/debian/pool/main/d/debian-archive-keyring/debian-archive-keyring_2023.4_all.deb" || true
+if [ -f "$KEYRING_DEB" ] && [ -s "$KEYRING_DEB" ]; then
     dpkg-deb -x "$KEYRING_DEB" "${ROOTFS_DIR}/"
     echo "Installed Debian archive keyring into rootfs"
     ls -la "${ROOTFS_DIR}/usr/share/keyrings/" | grep debian || true

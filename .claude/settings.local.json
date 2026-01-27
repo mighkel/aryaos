@@ -6,7 +6,8 @@
       "WebFetch(domain:github.com)",
       "Bash(curl:*)",
       "Bash(python3:*)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:packages.debian.org)"
     ]
   }
 }
