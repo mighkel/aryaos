@@ -1,1 +1,1 @@
-deb [arch=armhf signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian   bookworm stable
+deb [arch=arm64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian   bookworm stable
