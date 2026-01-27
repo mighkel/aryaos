@@ -25,6 +25,12 @@ wget -q -O "$KEYRING_DEB" "http://deb.debian.org/debian/pool/main/d/debian-archi
 wget -q -O "$KEYRING_DEB" "http://deb.debian.org/debian/pool/main/d/debian-archive-keyring/debian-archive-keyring_2023.4_all.deb" || true
 if [ -f "$KEYRING_DEB" ] && [ -s "$KEYRING_DEB" ]; then
     dpkg-deb -x "$KEYRING_DEB" "${ROOTFS_DIR}/"
+    # The arm64 branch sources use .pgp extension but the bookworm keyring ships .gpg
+    if [ -f "${ROOTFS_DIR}/usr/share/keyrings/debian-archive-keyring.gpg" ] && \
+       [ ! -f "${ROOTFS_DIR}/usr/share/keyrings/debian-archive-keyring.pgp" ]; then
+        cp "${ROOTFS_DIR}/usr/share/keyrings/debian-archive-keyring.gpg" \
+           "${ROOTFS_DIR}/usr/share/keyrings/debian-archive-keyring.pgp"
+    fi
     echo "Installed Debian archive keyring into rootfs"
     ls -la "${ROOTFS_DIR}/usr/share/keyrings/" | grep debian || true
     rm -f "$KEYRING_DEB"

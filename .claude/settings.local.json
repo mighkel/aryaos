@@ -7,7 +7,12 @@
       "Bash(curl:*)",
       "Bash(python3:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "WebFetch(domain:packages.debian.org)"
+      "WebFetch(domain:packages.debian.org)",
+      "Bash(find:*)",
+      "Bash(xargs:*)",
+      "Bash(grep:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git update-index:*)"
     ]
   }
 }
