@@ -17,24 +17,34 @@
 
 # Set SDR Serial for dump1090 & dump978
 DUMP1090_RECEIVER_SERIAL="stx:1090:0"
-sed --follow-symlinks -i -E -e "s/RECEIVER_SERIAL.*/RECEIVER_SERIAL=$DUMP1090_RECEIVER_SERIAL/" /etc/default/dump1090-fa
+if [ -f /etc/default/dump1090-fa ]; then
+    sed --follow-symlinks -i -E -e "s/RECEIVER_SERIAL.*/RECEIVER_SERIAL=$DUMP1090_RECEIVER_SERIAL/" /etc/default/dump1090-fa
+fi
 DUMP978_RECEIVER_SERIAL="stx:978:0"
-sed --follow-symlinks -i -E -e "s/driver=rtlsdr /driver=rtlsdr,serial=$DUMP978_RECEIVER_SERIAL /" /etc/default/dump978-fa
+if [ -f /etc/default/dump978-fa ]; then
+    sed --follow-symlinks -i -E -e "s/driver=rtlsdr /driver=rtlsdr,serial=$DUMP978_RECEIVER_SERIAL /" /etc/default/dump978-fa
+fi
 
 # readsb
-dpkg -i /usr/src/readsb_3.14.1621_arm64.deb
+dpkg -i /usr/src/readsb_3.14.1621_arm64.deb || apt-get install -f -y
 
 READSB_RECEIVER_SERIAL="stx:1090:0"
-sed --follow-symlinks -i -E -e "s/RECEIVER_OPTIONS.*/RECEIVER_OPTIONS=\"--device $READSB_RECEIVER_SERIAL  --device-type rtlsdr --gain -10 --ppm 0\"/" /etc/default/readsb
+if [ -f /etc/default/readsb ]; then
+    sed --follow-symlinks -i -E -e "s/RECEIVER_OPTIONS.*/RECEIVER_OPTIONS=\"--device $READSB_RECEIVER_SERIAL  --device-type rtlsdr --gain -10 --ppm 0\"/" /etc/default/readsb
+fi
 
 # tar1090
 bash /usr/src/tar1090-install.sh
 
 # Replace FEED_URL in /etc/default/adsbcot with file:///run/readsb/aircraft.json
-sed --follow-symlinks -i -E -e "s/FEED_URL.*/FEED_URL=file:\/\/\/run\/readsb\/aircraft.json/" /etc/default/adsbcot
-
-# Remove # from the line containing FEED_URL in /etc/default/adsbcot
-sed --follow-symlinks -i -E -e "s/^# (FEED_URL.*)/\1/" /etc/default/adsbcot
+if [ -f /etc/default/adsbcot ]; then
+    sed --follow-symlinks -i -E -e "s/FEED_URL.*/FEED_URL=file:\/\/\/run\/readsb\/aircraft.json/" /etc/default/adsbcot
+    # Remove # from the line containing FEED_URL in /etc/default/adsbcot
+    sed --follow-symlinks -i -E -e "s/^# (FEED_URL.*)/\1/" /etc/default/adsbcot
+fi
 
 # Add the line EnvironmentFile=/etc/aryaos/aryaos-config.txt to /lib/systemd/system/adsbcot.service if the line does not already exist
-grep -qxF "EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/adsbcot.service || sed --follow-symlinks -i -E -e "/\[Service\]/a EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/adsbcot.service
+if [ -f /lib/systemd/system/adsbcot.service ]; then
+    grep -qxF "EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/adsbcot.service || \
+        sed --follow-symlinks -i -E -e "/\[Service\]/a EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/adsbcot.service
+fi

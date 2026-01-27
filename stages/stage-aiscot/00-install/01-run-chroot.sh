@@ -21,9 +21,12 @@ id ais-catcher || adduser --system --gecos 'AIS-catcher Service User' ais-catche
 usermod -a -G plugdev ais-catcher
 usermod -a -G dialout ais-catcher
 
-chown node-red /etc/default/ais-catcher
+chown node-red /etc/default/ais-catcher 2>/dev/null || true
 
-dpkg -i /usr/src/AIS-catcher_0.58.1_arm64.deb
+dpkg -i /usr/src/AIS-catcher_0.58.1_arm64.deb || apt-get install -f -y
 
 # Add the line EnvironmentFile=/etc/aryaos/aryaos-config.txt to /lib/systemd/system/aiscot.service if the line does not already exist
-grep -qxF "EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/aiscot.service || sed --follow-symlinks -i -E -e "/\[Service\]/a EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/aiscot.service
+if [ -f /lib/systemd/system/aiscot.service ]; then
+    grep -qxF "EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/aiscot.service || \
+        sed --follow-symlinks -i -E -e "/\[Service\]/a EnvironmentFile=/etc/aryaos/aryaos-config.txt" /lib/systemd/system/aiscot.service
+fi
