@@ -24,7 +24,7 @@ jobs:
           git submodule update --init --recursive
           if [ ! -d "pi-gen" ]; then
             echo "pi-gen submodule missing, cloning manually..."
-            git clone --depth 1 https://github.com/RPi-Distro/pi-gen.git
+            git clone --depth 1 --branch arm64 https://github.com/RPi-Distro/pi-gen.git
           fi
           echo "=== pi-gen directory check ==="
           ls -la pi-gen/
@@ -79,11 +79,6 @@ jobs:
           # Apply package fixes to all stage files
           ./scripts/fix-packages.sh
           
-          # Override architecture to arm64 (pi-gen defaults to armhf but upstream .debs are arm64)
-          sed -i 's/^export ARCH=armhf$/export ARCH=arm64/' pi-gen/build.sh
-          echo "=== Verify ARCH override ==="
-          grep 'export ARCH' pi-gen/build.sh
-
           echo "=== SHARED_FILES setting ==="
           grep SHARED_FILES config
 
