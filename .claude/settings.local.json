@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(gh run list:*)"
+      "Bash(gh run list:*)",
+      "Bash(git -C \"c:\\\\Users\\\\PNADMIN\\\\Documents\\\\GitHub\\\\aryaos\" update-index --chmod=+x stages/stage-pytak/00-install/00-run.sh)"
     ]
   }
 }

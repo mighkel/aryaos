@@ -45,6 +45,6 @@ chown -R node-red:node-red /var/www/html
 chmod 0755 /var/www/html
 chmod 0755 /var/www/html/recorder
 
-chown node-red:node-red /etc/default/*cot
+chown node-red:node-red /etc/default/*cot 2>/dev/null || true
 
 systemctl enable nodered
