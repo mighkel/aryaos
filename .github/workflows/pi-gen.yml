@@ -79,6 +79,10 @@ jobs:
           # Apply package fixes to all stage files
           ./scripts/fix-packages.sh
           
+          # Fix Debian archive GPG keys for bookworm on arm64 branch
+          chmod +x scripts/fix-debian-keys.sh
+          ./scripts/fix-debian-keys.sh
+
           echo "=== SHARED_FILES setting ==="
           grep SHARED_FILES config
 
