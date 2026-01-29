@@ -30,5 +30,6 @@ install -v -m 644 "${SHARED_FILES}/adsbcot/readsb_3.14.1621_arm64.deb" "${ROOTFS
 install -v -m 755 "${SHARED_FILES}/adsbcot/readsb-install.sh" "${ROOTFS_DIR}/usr/src/"
 install -v -m 755 "${SHARED_FILES}/adsbcot/run_readsb.sh" "${ROOTFS_DIR}/usr/local/sbin/"
 install -v -m 644 "${SHARED_FILES}/adsbcot/readsb.service" "${ROOTFS_DIR}/lib/systemd/system/"
+install -v -m 644 "${SHARED_FILES}/adsbcot/readsb-config.txt" "${ROOTFS_DIR}/etc/default/readsb"
 install -v -m 755 "${SHARED_FILES}/adsbcot/readsb-set-location.sh" "${ROOTFS_DIR}/usr/local/bin/"
 install -v -m 755 "${SHARED_FILES}/adsbcot/readsb-gain.sh" "${ROOTFS_DIR}/usr/local/bin/"

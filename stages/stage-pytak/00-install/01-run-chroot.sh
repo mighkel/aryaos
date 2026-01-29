@@ -23,10 +23,11 @@ else
     echo "Warning: No pytak .deb files found in /tmp/pytak-debs"
 fi
 
-# Add EnvironmentFile to service files if they exist
+# Add EnvironmentFile to service files and enable services
 for service in adsbcot aiscot dronecot lincot; do
     if [ -f "/lib/systemd/system/${service}.service" ]; then
         grep -qxF "EnvironmentFile=/etc/aryaos/aryaos-config.txt" "/lib/systemd/system/${service}.service" || \
             sed --follow-symlinks -i -E -e "/\[Service\]/a EnvironmentFile=/etc/aryaos/aryaos-config.txt" "/lib/systemd/system/${service}.service"
+        systemctl enable "${service}" || true
     fi
 done

@@ -101,3 +101,8 @@ fi
 
 # lincot
 install -v -m 755 "${SHARED_FILES}/aryaos/get_position.sh" "${ROOTFS_DIR}/usr/local/bin/"
+
+
+# TAK Heartbeat
+install -v -m 755 "${SHARED_FILES}/aryaos/aryaos-heartbeat.sh" "${ROOTFS_DIR}/usr/local/bin/"
+install -v -m 644 "${SHARED_FILES}/aryaos/aryaos-heartbeat.service" "${ROOTFS_DIR}/etc/systemd/system/"

@@ -7,7 +7,7 @@ set -e
 trap 'echo "[ERROR] Error in line $LINENO when executing: $BASH_COMMAND"' ERR
 renice 10 $$
 
-srcdir=/run/adsb
+srcdir=/run/readsb
 repo="https://github.com/wiedehopf/tar1090"
 db_repo="https://github.com/wiedehopf/tar1090-db"
 
@@ -161,7 +161,7 @@ else
     TAR_VERSION="$(revision)"
 fi
 
-srcdir=/run/adsb
+srcdir=/run/readsb
 
 # if [[ -n $1 ]] && [ "$1" != "test" ] ; then
 #     srcdir=$1

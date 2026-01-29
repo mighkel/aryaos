@@ -16,7 +16,7 @@
 
 
 # Set SDR Serial for dump1090 & dump978
-DUMP1090_RECEIVER_SERIAL="stx:1090:0"
+DUMP1090_RECEIVER_SERIAL="1090"
 if [ -f /etc/default/dump1090-fa ]; then
     sed --follow-symlinks -i -E -e "s/RECEIVER_SERIAL.*/RECEIVER_SERIAL=$DUMP1090_RECEIVER_SERIAL/" /etc/default/dump1090-fa
 fi
@@ -28,7 +28,7 @@ fi
 # readsb
 dpkg -i /usr/src/readsb_3.14.1621_arm64.deb || apt-get install -f -y
 
-READSB_RECEIVER_SERIAL="stx:1090:0"
+READSB_RECEIVER_SERIAL="1090"
 if [ -f /etc/default/readsb ]; then
     sed --follow-symlinks -i -E -e "s/RECEIVER_OPTIONS.*/RECEIVER_OPTIONS=\"--device $READSB_RECEIVER_SERIAL  --device-type rtlsdr --gain -10 --ppm 0\"/" /etc/default/readsb
 fi
@@ -36,11 +36,14 @@ fi
 # tar1090
 bash /usr/src/tar1090-install.sh
 
-# Replace FEED_URL in /etc/default/adsbcot with file:///run/readsb/aircraft.json
+# Ensure /etc/default/adsbcot exists with FEED_URL pointing to readsb
 if [ -f /etc/default/adsbcot ]; then
     sed --follow-symlinks -i -E -e "s/FEED_URL.*/FEED_URL=file:\/\/\/run\/readsb\/aircraft.json/" /etc/default/adsbcot
     # Remove # from the line containing FEED_URL in /etc/default/adsbcot
     sed --follow-symlinks -i -E -e "s/^# (FEED_URL.*)/\1/" /etc/default/adsbcot
+else
+    # Create default config if .deb package didn't provide one
+    echo "FEED_URL=file:///run/readsb/aircraft.json" > /etc/default/adsbcot
 fi
 
 # Add the line EnvironmentFile=/etc/aryaos/aryaos-config.txt to /lib/systemd/system/adsbcot.service if the line does not already exist
