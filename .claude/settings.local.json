@@ -12,7 +12,10 @@
       "Bash(xargs:*)",
       "Bash(grep:*)",
       "Bash(git ls-files:*)",
-      "Bash(git update-index:*)"
+      "Bash(git update-index:*)",
+      "Bash(git submodule:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(findstr:*)"
     ]
   }
 }
