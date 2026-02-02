@@ -24,6 +24,9 @@ systemctl set-default multi-user
 systemctl enable NetworkManager
 systemctl enable NetworkManager-dispatcher
 
+# WiFi AP
+systemctl enable comitup
+
 # TAK Heartbeat
 systemctl enable aryaos-heartbeat
 
