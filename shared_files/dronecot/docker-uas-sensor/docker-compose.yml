@@ -2,7 +2,7 @@ version: '2'
 
 services:
  dronescout:
-  image: "docker.dronescout.co:5045/dronescout_x86_64" #use dronescout_arm64 for ARM64 platforms
+  image: "docker.dronescout.co:5045/dronescout_arm64"
   volumes:
    - ./config:/config # folder with config files: dronescout.conf, wlan_channels.conf and license file
   hostname: dronescout
